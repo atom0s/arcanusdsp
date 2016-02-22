@@ -108,7 +108,7 @@
                                 <span class="nodrops">There are no drops to display!</span>
                             </td>
                         </tr>
-                        <tr ng-repeat="d in monster.drops">
+                        <tr ng-repeat="d in monster.drops" repeat-done="refreshTooltips()">
                             <td class="icon">
                                 <a ng-href="http://www.ffxiah.com/item/{{d.itemid}}">
                                     <img ng-src="http://static.ffxiah.com/images/mini-icons/{{d.itemid}}.png" />
