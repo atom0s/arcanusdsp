@@ -385,6 +385,32 @@ module.exports = function (arcanus) {
             });
         });
 
+        // Query for players with this item in their bazaar..
+        tasks.push(function (callback) {
+            const sql = `SELECT c.charid, c.charname, ci.itemid, ci.bazaar, COALESCE(ita.name,itb.name,itf.name,itp.name,itw.name) AS itemname FROM char_inventory AS ci
+                         LEFT JOIN item_armor AS ita ON ci.itemid = ita.itemid
+                         LEFT JOIN item_basic AS itb ON ci.itemid = itb.itemid
+                         LEFT JOIN item_furnishing AS itf ON ci.itemid = itf.itemid
+                         LEFT JOIN item_puppet AS itp ON ci.itemid = itp.itemid
+                         LEFT JOIN item_weapon AS itw ON ci.itemid = itw.itemid
+                         LEFT JOIN chars AS c on c.charid = ci.charid
+                         WHERE ci.bazaar > 0 AND ci.itemid = ?
+                         ORDER BY ci.bazaar ASC;`
+
+            item.bazaar = [];
+
+            arcanus.db.query(sql, [item.itemid], function (err, rows) {
+                if (err)
+                    return callback();
+
+                rows.forEach(function (r) {
+                    item.bazaar.push(r);
+                });
+
+                return callback();
+            });
+        });
+
         // Perform the queries..
         async.series(tasks, function (err) {
             return done(err ? new Error('Failed to obtain the item.') : null, err ? null : item);

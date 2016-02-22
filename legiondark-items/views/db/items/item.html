@@ -347,6 +347,42 @@
                 </table>
             </td>
         </tr>
+        <tr>
+            <td>
+                <!-- Item Bazaar Information -->
+                <table class="table table-bordered table-condensed table-hover item-information-table">
+                    <thead>
+                        <tr>
+                            <th><img src="/public/img/ffxi/nameflags/bazaar.png" alt="bazaar" width="16" height="16">
+                                Bazaars <small>(Players Bazaaring This Item)</small>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tr ng-show="item.bazaar == null || item.bazaar.length == 0">
+                        <td>This item has no bazaar information to display!</td>
+                    </tr>
+
+                    <tr ng-show="item.bazaar.length > 0">
+                        <td>
+                            <table id="bazaartable" class="table table-bordered table-condensed table-hover item-information-table tablesorter">
+                                <thead>
+                                    <th>Player Name</th>
+                                    <th>Price</th>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="d in item.bazaar" repeat-done="makeSortable('bazaartable')">
+                                        <td>
+                                            <a ng-href="/db/characters/{{d.charid}}/{{d.charname}}">{{d.charname}}</a>
+                                        </td>
+                                        <td>{{d.bazaar | currency:"$":0}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
     </table>
 </div>
 
