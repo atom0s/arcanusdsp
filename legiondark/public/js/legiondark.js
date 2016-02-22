@@ -73,7 +73,10 @@ legion.controller('legionController', ['$filter', '$http', '$sce', '$scope', '$w
      * @param {string} id                       The table id to make sortable.
      */
     $scope.makeSortable = function (id) {
-        $('#' + id).tablesorter();
+        $('#' + id).tablesorter({
+            headerTemplate : '{content}{icon}',
+            widgets : ["columns"]
+        });
     };
 
     /**
