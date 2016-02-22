@@ -85,9 +85,10 @@ module.exports = function (arcanus) {
      * Obtains a monster by their id.
      *
      * @param {number} mobid                    The monster id to obtain data for.
+     * @param {boolean} isAdmin                 Boolean if the request was made by an admin.
      * @param {function} done                   The callback function to continue the request chain.
      */
-    MonsterModule.getMonsterById = function (mobid, done) {
+    MonsterModule.getMonsterById = function (mobid, isAdmin, done) {
         var monster = {};
         var tasks = [];
 
@@ -108,11 +109,13 @@ module.exports = function (arcanus) {
                 monster = {
                     mobid: row[0].mobid,
                     dropid: row[0].dropid,
+                    groupid: row[0].groupid,
                     name: row[0].polutils_name,
                     hp: row[0].HP,
                     mp: row[0].MP,
                     minlevel: row[0].minLevel,
                     maxlevel: row[0].maxLevel,
+                    poolid: row[0].poolid,
                     pos_x: row[0].pos_x,
                     pos_y: row[0].pos_y,
                     pos_z: row[0].pos_z,
@@ -137,9 +140,6 @@ module.exports = function (arcanus) {
                          WHERE dropid = ?;`;
 
             arcanus.db.query(sql, [monster.dropid], function (err, rows) {
-                // Remove the drop id from our object..
-                delete monster.dropid;
-
                 // Handle errors..
                 if (err)
                     return callback(err);
@@ -161,7 +161,7 @@ module.exports = function (arcanus) {
                 return callback();
 
             // Invalidate the monsters information..
-            if (cfg.blocked.indexOf(mobid) !== -1) {
+            if (cfg.blocked.indexOf(mobid) !== -1 && !isAdmin) {
                 monster.minlevel = 'super hard bro';
                 monster.maxlevel = 'wtfhax';
                 monster.pos_x = 'not';

@@ -113,8 +113,13 @@ module.exports = function (arcanus) {
         if (!mobid)
             return res.status(204).send(null);
 
+        // Determine if the request is by an admin..
+        var isAdmin = false;
+        if (req.user && req.user.priv > 1)
+            isAdmin = true;
+
         // Obtain the monster by their id..
-        arcanus.services.get('darkstarservice').Monsters.getMonsterById(mobid, function (err, monster) {
+        arcanus.services.get('darkstarservice').Monsters.getMonsterById(mobid, isAdmin, function (err, monster) {
             var status = (err) ? 400 : 200;
             res.status(status).send(monster);
         });

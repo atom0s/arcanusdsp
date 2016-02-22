@@ -62,6 +62,20 @@
                                         </small>
                                     </td>
                                 </tr>
+                                @if (model.user && model.user.priv && model.user.priv > 1) {
+                                <tr>
+                                    <td class="header"><strong>Drop ID:</strong></td>
+                                    <td class="value">{{monster.dropid}}</td>
+                                </tr>
+                                <tr>
+                                    <td class="header"><strong>Group ID:</strong></td>
+                                    <td class="value">{{monster.groupid}}</td>
+                                </tr>
+                                <tr>
+                                    <td class="header"><strong>Pool ID:</strong></td>
+                                    <td class="value">{{monster.poolid}}</td>
+                                </tr>
+                                }
                             </table>
                         </td>
                     </tr>
