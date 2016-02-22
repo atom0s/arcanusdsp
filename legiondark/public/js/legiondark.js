@@ -69,6 +69,14 @@ legion.controller('legionController', ['$filter', '$http', '$sce', '$scope', '$w
     };
 
     /**
+     * Turns a table into a sortable table by its table id.
+     * @param {string} id                       The table id to make sortable.
+     */
+    $scope.makeSortable = function (id) {
+        $('#' + id).tablesorter();
+    };
+
+    /**
      * Refreshes the FFXiAH tooltips for late-loading pages.
      */
     $scope.refreshTooltips = function () {

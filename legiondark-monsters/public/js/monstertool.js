@@ -172,6 +172,10 @@ $(document).ready(function () {
     // Toggle the collapse state of body elements..
     $('.collapsible').on('click', 'thead', function () {
 
+        // Ensure this is a parent that can collaspe..
+        if ($(this).parent()[0].className.indexOf('collapsible') === -1)
+            return;
+
         // Obtain the tbody of the table being collapsed..
         var $body = $(this).parent().children('tbody');
 

@@ -321,7 +321,7 @@
 
                     <tr ng-show="item.drops.length > 0">
                         <td>
-                            <table class="table table-bordered table-condensed table-hover item-information-table">
+                            <table id="droptable" class="table table-bordered table-condensed table-hover item-information-table tablesorter">
                                 <thead>
                                     <th>Name</th>
                                     <th>Zone</th>
@@ -329,7 +329,7 @@
                                     <th>Position</th>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="d in item.drops">
+                                    <tr ng-repeat="d in item.drops" repeat-done="makeSortable('droptable')">
                                         <td><a ng-href="/db/monsters/{{d.mobid}}/{{d.polutils_name}}">{{d.polutils_name
                                             | cleanName}}</a></td>
                                         <td>{{d.zonename | cleanNameTitleCase}}</td>
