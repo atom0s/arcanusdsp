@@ -71,6 +71,7 @@ module.exports = function DarkstarServiceModule(arcanus) {
         this.Characters = require('./darkstar/characters')(arcanus);
         this.Items = require('./darkstar/items')(arcanus);
         this.Monsters = require('./darkstar/monsters')(arcanus);
+        this.Spells = require('./darkstar/spells')(arcanus);
 
         // Build the item cache..
         this.Items.buildItemCache(function (err) {
