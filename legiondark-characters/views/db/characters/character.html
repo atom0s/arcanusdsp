@@ -176,7 +176,7 @@
                             <td class="name">{{ah.sell_date * 1000 | date}}</td>
                             <td class="name">{{ah.seller_name}}</td>
                             <td class="name">{{ah.buyer_name}}</td>
-                            <td class="name">{{ah.sale | currency}}</td>
+                            <td class="name">{{ah.sale | currency:"$":0}}</td>
                         </tr>
                     </tbody>
                     <tbody ng-show="character.ahhistory.length == 0">
@@ -210,7 +210,7 @@
                                     {{b.itemname | cleanNameTitleCase}}
                                 </a>
                             </td>
-                            <td class="name">{{b.bazaar | currency}}</td>
+                            <td class="name">{{b.bazaar | currency:"$":0}}</td>
                         </tr>
                     </tbody>
                     <tbody ng-show="character.bazaar.length == 0">
