@@ -40,11 +40,16 @@ module.exports = function (arcanus) {
     /**
      * Gets a list of BCNMs.
      *
+     * @param {boolean} isAdmin                 Boolean if the request was made by an admin.
      * @param {function} done                   The callback to invoke when the function has completed.
      */
-    BcnmModule.getBcnmList = function (done) {
+    BcnmModule.getBcnmList = function (isAdmin, done) {
         const sql = `SELECT bcnmid, name, levelcap FROM bcnm_info
 	                 ORDER BY name ASC;`;
+
+        var cfg = arcanus.config.bcnmService || null;
+        if (cfg === null || !(cfg.blocked instanceof Array))
+            return done(new Error('Missing required bcnmService configurations!'));
 
         // Query the database for the BCNM list..
         arcanus.db.query(sql, [], function (err, rows) {
@@ -53,7 +58,13 @@ module.exports = function (arcanus) {
 
             var bcnms = [];
             rows.forEach(function (r) {
-                bcnms.push(r);
+
+                if (cfg.blocked.indexOf(r.bcnmid) !== -1) {
+                    if (isAdmin)
+                        bcnms.push(r);
+                } else {
+                    bcnms.push(r);
+                }
             });
 
             return done(null, bcnms);
@@ -64,9 +75,10 @@ module.exports = function (arcanus) {
      * Gets a BCNM by its id.
      *
      * @param {number} bcnmid                   The id of the BCNM to obtain.
+     * @param {boolean} isAdmin                 Boolean if the request was made by an admin.
      * @param {function} done                   The callback to invoke when the function has completed.
      */
-    BcnmModule.getBcnmById = function (bcnmid, done) {
+    BcnmModule.getBcnmById = function (bcnmid, isAdmin, done) {
         var tasks = [];
         var bcnm = null;
 
@@ -75,6 +87,15 @@ module.exports = function (arcanus) {
             const sql = `SELECT bc.*, zs.zoneid AS zoneid, zs.name AS zonename FROM bcnm_info AS bc
                          INNER JOIN zone_settings AS zs ON bc.zoneid = zs.zoneid
 	                     WHERE bcnmid = ?`;
+
+            // Check if this BCNM is blocked..
+            var cfg = arcanus.config.bcnmService || null;
+            if (cfg === null || !(cfg.blocked instanceof Array))
+                return callback();
+
+            // Block this bcnm from showing..
+            if (cfg.blocked.indexOf(mobid) !== -1 && !isAdmin)
+                return callback();
 
             arcanus.db.query(sql, [bcnmid], function (err, row) {
                 if (err)

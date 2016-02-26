@@ -85,7 +85,12 @@ module.exports = function (arcanus) {
      * @param {function} next                   The callback function to continue the request chain.
      */
     ajaxRouter.get('/bcnms', function (req, res, next) {
-        arcanus.services.get('darkstarservice').Bcnms.getBcnmList(function (err, bcnms) {
+        // Determine if the request is by an admin..
+        var isAdmin = false;
+        if (req.user && req.user.priv > 1)
+            isAdmin = true;
+
+        arcanus.services.get('darkstarservice').Bcnms.getBcnmList(isAdmin, function (err, bcnms) {
             var status = (err) ? 400 : 200;
             res.status(status).send(bcnms);
         });
@@ -106,8 +111,13 @@ module.exports = function (arcanus) {
         if (!bcnmid)
             return res.status(204).send(null);
 
+        // Determine if the request is by an admin..
+        var isAdmin = false;
+        if (req.user && req.user.priv > 1)
+            isAdmin = true;
+
         // Obtain the bcnm by its bcnmid..
-        arcanus.services.get('darkstarservice').Bcnms.getBcnmById(bcnmid, function (err, bcnm) {
+        arcanus.services.get('darkstarservice').Bcnms.getBcnmById(bcnmid, isAdmin, function (err, bcnm) {
             var status = (err) ? 400 : 200;
             res.status(status).send(bcnm);
         });
