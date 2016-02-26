@@ -91,11 +91,11 @@ module.exports = function (arcanus) {
             // Check if this BCNM is blocked..
             var cfg = arcanus.config.bcnmService || null;
             if (cfg === null || !(cfg.blocked instanceof Array))
-                return callback();
+                return callback(new Error('Blocked BCNM was attempted to be loaded.'));
 
             // Block this bcnm from showing..
-            if (cfg.blocked.indexOf(mobid) !== -1 && !isAdmin)
-                return callback();
+            if (cfg.blocked.indexOf(bcnmid) !== -1 && !isAdmin)
+                return callback(new Error('Blocked BCNM was attempted to be loaded.'));
 
             arcanus.db.query(sql, [bcnmid], function (err, row) {
                 if (err)
