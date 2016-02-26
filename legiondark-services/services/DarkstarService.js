@@ -68,6 +68,7 @@ module.exports = function DarkstarServiceModule(arcanus) {
     DarkstarService.prototype.Initialize = function (done) {
         // Load the services sub-modules..
         this.Accounts = require('./darkstar/accounts')(arcanus);
+        this.Bcnms = require('./darkstar/bcnms')(arcanus);
         this.Characters = require('./darkstar/characters')(arcanus);
         this.Items = require('./darkstar/items')(arcanus);
         this.Monsters = require('./darkstar/monsters')(arcanus);

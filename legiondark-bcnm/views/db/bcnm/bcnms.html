@@ -1,0 +1,30 @@
+@html.extend('layout', function(model) { @html.block('content', function(model) {
+
+<div id="bcnms" class="widget widget-blue" ng-controller="bcnmToolController" data-ng-init="getBcnmList()" ng-cloak>
+    <div class="widget-heading">
+        <div class="widget-title">
+            <span>Lookup A BCNM</span>
+        </div>
+    </div>
+    <div class="widget-body">
+        <div class="noresults" ng-show="bcnms.length == 0">
+            <span>Sorry, no BCNMs were found.</span>
+        </div>
+        <div class="list" ng-show="bcnms.length > 0">
+            <div class="list-item" ng-repeat="b in bcnms">
+                <a ng-href="/db/bcnms/{{b.bcnmid}}/{{b.name}}">{{b.name | cleanNameTitleCase}}</a>
+                <span class="bcnm-info">&bull; Lv. {{b.levelcap}}</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+}) })
+
+@html.append('css', function(model) {
+<link rel="stylesheet" href="/public/css/bcnmtool.css" />
+})
+
+@html.append('footer-scripts', function(model) {
+<script type="text/javascript" src="/public/js/bcnmtool.js"></script>
+})

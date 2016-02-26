@@ -74,8 +74,8 @@ legion.controller('legionController', ['$filter', '$http', '$sce', '$scope', '$w
      */
     $scope.makeSortable = function (id) {
         $('#' + id).tablesorter({
-            headerTemplate : '{content}{icon}',
-            widgets : ["columns"]
+            headerTemplate: '{content}{icon}',
+            widgets: ["columns"]
         });
     };
 
@@ -1451,6 +1451,29 @@ legion.filter('titleName', function () {
         if (titles[val] == null)
             return '(Unknown Title ' + val + ')';
         return titles[val].name;
+    };
+});
+
+/**
+ * timestamp (filter) - Converts the given value to a timestamp.
+ *
+ * @param {number}                  The raw time to convert.
+ * @returns {string}                The converted timestamp.
+ */
+legion.filter('timestamp', function () {
+    return function (val) {
+        if (val == null || val === 0)
+            return '00:00:00';
+
+        const pad = function (n) {
+            return '00'.substr(n.toString().length) + n.toString();
+        };
+
+        const h = pad(Math.floor((val / (60 * 60)) % 24));
+        const m = pad(Math.floor((val / 60) % 60));
+        const s = pad(Math.floor(val % 60));
+
+        return `${h}:${m}:${s} (hh:mm:ss)`;
     };
 });
 
