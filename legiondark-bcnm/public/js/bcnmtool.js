@@ -132,6 +132,22 @@ legion.controller('bcnmToolController', ['$filter', '$http', '$sce', '$scope', '
 }]);
 
 /**
+ * bcnmLevelCap (filter) - Converts the given level cap to its string value.
+ *
+ * @param {object} val              The value to convert.
+ * @returns {string}                The converted value.
+ */
+legion.filter('bcnmLevelCap', function () {
+    return function (val) {
+        if (val == null)
+            return 'Unknown';
+        if (val == 0)
+            return 'Uncapped';
+        return val;
+    };
+});
+
+/**
  * bcnmRules (filter) - Converts the BCNM rules to strings.
  *
  * @param {object} val              The value to convert.

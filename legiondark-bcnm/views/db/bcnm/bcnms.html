@@ -13,7 +13,7 @@
         <div class="list" ng-show="bcnms.length > 0">
             <div class="list-item" ng-repeat="b in bcnms">
                 <a ng-href="/db/bcnms/{{b.bcnmid}}/{{b.name}}">{{b.name | cleanNameTitleCase}}</a>
-                <span class="bcnm-info">&bull; Lv. {{b.levelcap}}</span>
+                <span class="bcnm-info">&bull; Lv. Cap - {{b.levelcap | bcnmLevelCap}}</span>
             </div>
         </div>
     </div>
