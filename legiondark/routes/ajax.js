@@ -43,11 +43,21 @@ module.exports = function (arcanus) {
      * @param {function} next                   The callback function to continue the request chain.
      */
     router.get('/latestnews', function (req, res, next) {
+        // Check the cache..
+        var cacheValue = arcanus.cache.get('latestnews');
+        if (cacheValue != undefined) {
+            return res.status(200).send(cacheValue);
+        }
+
         // Obtain the posts from the news service..
         var newsService = arcanus.services.get('newsservice');
         newsService.getNewsPosts(function (err, posts) {
             if (err || posts === null)
                 return res.status(204).send('[]');
+
+            // Set the news cache..
+            arcanus.cache.set('latestnews', posts, 600);
+
             return res.status(200).send(posts);
         });
     });
@@ -60,6 +70,12 @@ module.exports = function (arcanus) {
      * @param {function} next                   The callback function to continue the request chain.
      */
     router.get('/serverstatus', function (req, res, next) {
+        // Check the cache..
+        var cacheValue = arcanus.cache.get('serverstatus');
+        if (cacheValue != undefined) {
+            return res.status((cacheValue == true) ? 200 : 204).send(cacheValue);
+        }
+
         // Obtain the configurations..
         var cfg = arcanus.config.darkstar || null;
         if (!cfg)
@@ -70,11 +86,13 @@ module.exports = function (arcanus) {
             host: cfg.host,
             port: cfg.port
         }, function () {
+            arcanus.cache.set('serverstatus', true, 120);
             return res.status(200).send(true);
         });
 
         // Error handler..
         client.on('error', function (err) {
+            arcanus.cache.set('serverstatus', false, 120);
             return res.status(204).send(false);
         });
 
@@ -90,10 +108,21 @@ module.exports = function (arcanus) {
      * @param {function} next                   The callback function to continue the request chain.
      */
     router.get('/onlinecharacters', function (req, res, next) {
+        // Check the cache..
+        var cacheValue = arcanus.cache.get('onlinecharacters');
+        if (cacheValue != undefined) {
+            return res.status(200).send(cacheValue);
+        }
+
         // Obtain the characters from the DarkStar service..
         var dsService = arcanus.services.get('darkstarservice');
         dsService.Characters.getOnlineCharacters(function (err, characters) {
             var status = (err || characters === null) ? 500 : 200;
+
+            if (status === 200) {
+                arcanus.cache.set('onlinecharacters', characters, 120);
+            }
+
             return res.status(status).send(characters);
         });
     });

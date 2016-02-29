@@ -118,9 +118,20 @@ module.exports = function (arcanus) {
         if (req.user && req.user.priv > 1)
             isAdmin = true;
 
+        // Check the cache..
+        var cacheValue = arcanus.cache.get(isAdmin ? 'monster-' + mobid.toString() + isAdmin : 'monster-' + mobid.toString());
+        if (cacheValue != undefined) {
+            return res.status(200).send(cacheValue);
+        }
+
         // Obtain the monster by their id..
         arcanus.services.get('darkstarservice').Monsters.getMonsterById(mobid, isAdmin, function (err, monster) {
             var status = (err) ? 400 : 200;
+
+            if (status === 200) {
+                arcanus.cache.set(isAdmin ? 'monster-' + mobid.toString() + isAdmin : 'monster-' + mobid.toString(), monster, 600);
+            }
+
             res.status(status).send(monster);
         });
     });

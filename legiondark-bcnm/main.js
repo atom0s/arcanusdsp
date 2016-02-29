@@ -90,8 +90,19 @@ module.exports = function (arcanus) {
         if (req.user && req.user.priv > 1)
             isAdmin = true;
 
+        // Check the cache..
+        var cacheValue = arcanus.cache.get(isAdmin ? 'bcnmlist-admin' : 'bcnmlist');
+        if (cacheValue != undefined) {
+            return res.status(200).send(cacheValue);
+        }
+
         arcanus.services.get('darkstarservice').Bcnms.getBcnmList(isAdmin, function (err, bcnms) {
             var status = (err) ? 400 : 200;
+
+            if (status === 200) {
+                arcanus.cache.set(isAdmin ? 'bcnmlist-admin' : 'bcnmlist', bcnms, 600);
+            }
+
             res.status(status).send(bcnms);
         });
     });
@@ -116,9 +127,20 @@ module.exports = function (arcanus) {
         if (req.user && req.user.priv > 1)
             isAdmin = true;
 
+        // Check the cache..
+        var cacheValue = arcanus.cache.get(isAdmin ? 'bcnm-' + bcnmid.toString() + isAdmin : 'bcnm-' + bcnmid.toString());
+        if (cacheValue != undefined) {
+            return res.status(200).send(cacheValue);
+        }
+
         // Obtain the bcnm by its bcnmid..
         arcanus.services.get('darkstarservice').Bcnms.getBcnmById(bcnmid, isAdmin, function (err, bcnm) {
             var status = (err) ? 400 : 200;
+
+            if (status === 200) {
+                arcanus.cache.set(isAdmin ? 'bcnm-' + bcnmid.toString() + isAdmin : 'bcnm-' + bcnmid.toString(), bcnm, 600);
+            }
+
             res.status(status).send(bcnm);
         });
     });

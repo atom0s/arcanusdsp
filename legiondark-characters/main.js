@@ -113,9 +113,20 @@ module.exports = function (arcanus) {
         if (!charid)
             return res.status(204).send(null);
 
+        // Check the cache..
+        var cacheValue = arcanus.cache.get('character-profile-' + charid.toString());
+        if (cacheValue != undefined) {
+            return res.status(200).send(cacheValue);
+        }
+
         // Obtain the character by their charid..
         arcanus.services.get('darkstarservice').Characters.getCharacterById(charid, function (err, character) {
             var status = (err) ? 400 : 200;
+
+            if (status === 200) {
+                arcanus.cache.set('character-profile-' + charid.toString(), character, 600);
+            }
+
             res.status(status).send(character);
         });
     });
