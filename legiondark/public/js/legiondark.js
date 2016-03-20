@@ -1473,7 +1473,7 @@ legion.filter('timestamp', function () {
         const m = pad(Math.floor((val / 60) % 60));
         const s = pad(Math.floor(val % 60));
 
-        return `${h}:${m}:${s} (hh:mm:ss)`;
+        return h + ':' + m + ':' + s +  ' (hh:mm:ss)';
     };
 });
 
