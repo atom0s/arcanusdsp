@@ -24,6 +24,9 @@
         <div class="widget-body">
             <span ng-bind-html="post.text | html"></span>
         </div>
+        <div class="widget-footer">
+            <strong><em>Posted On:</em></strong> {{post.time}} by <strong><span ng-bind-html="post.author | html"></span></strong>
+        </div>
     </div>
 </div>
 
