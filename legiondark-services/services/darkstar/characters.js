@@ -465,7 +465,7 @@ module.exports = function (arcanus) {
 
             // Free the character..
             arcanus.db.query('UPDATE chars SET pos_zone = ?, pos_prevzone = ?, pos_rot = ?, pos_x = ?, pos_y = ?, pos_z = ? WHERE charid = ?;',
-                [homeZone, prevZone, rows[0].home_rot, rows[0].home_x, rows[0].home_y, rows[0].home_zone, charid], function (err, results) {
+                [homeZone, prevZone, rows[0].home_rot, rows[0].home_x, rows[0].home_y, rows[0].home_z, charid], function (err, results) {
                     if (err)
                         return done(new Error('There was an error while trying to free your character.'));
 
