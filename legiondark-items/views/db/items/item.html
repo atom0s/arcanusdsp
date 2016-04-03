@@ -268,7 +268,7 @@
                                     <thead>
                                         <tr>
                                             <th colspan="3" class="warning">
-                                                <a href="/db/item/{{craft.crystal}}">
+                                                <a href="/db/items/{{craft.crystal}}">
                                                     <img ng-src="http://static.ffxiah.com/images/mini-icons/{{craft.crystal}}.png" alt="" width="16" height="16" />
                                                 </a>
                                                 {{craft.requirements | craftRequirements}}
@@ -279,7 +279,7 @@
                                         <tr ng-repeat="ingredient in craft.ingredients">
                                             <td>
                                                 <img ng-src="http://static.ffxiah.com/images/mini-icons/{{ingredient.itemid}}.png" alt="" width="16" height="16" />
-                                                <a ng-href="/db/item/{{ingredient.itemid}}/">{{ingredient.name |
+                                                <a ng-href="/db/items/{{ingredient.itemid}}/">{{ingredient.name |
                                                     cleanNameTitleCase}}</a> x{{ingredient.count}}
                                             </td>
                                         </tr>
@@ -293,7 +293,7 @@
                                             <td>
                                                 <strong>{{result.type}}: </strong>
                                                 <img ng-src="http://static.ffxiah.com/images/mini-icons/{{result.itemid}}.png" alt="" width="16" height="16" />
-                                                <a ng-href="/db/item/{{result.itemid}}/">{{result.name |
+                                                <a ng-href="/db/items/{{result.itemid}}/">{{result.name |
                                                     cleanNameTitleCase}}</a> x{{result.count}}
                                             </td>
                                         </tr>
