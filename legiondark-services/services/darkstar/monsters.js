@@ -38,6 +38,65 @@ module.exports = function (arcanus) {
     var MonsterModule = {};
 
     /**
+     * (Internal) Obtains a monsters health value based on the database information.
+     *
+     * @param lvl
+     * @param hp
+     * @param familyhp
+     * @param isNM
+     * @param scaleModAmount
+     * @returns {number}
+     */
+    var getMonstersHealth = function (lvl, hp, familyhp, isNM, scaleModAmount) {
+        var maxhp = 0;
+
+        var map_config_nm_multiplier = 1.1;
+        var map_config_mob_multiplier = 1.0;
+
+        // If the monster has no health, calculate it..
+        if (hp == 0) {
+            var base = 18.0;
+            var growth = 1.06;
+            var scale = familyhp / 100.0;
+
+            // TODO: Handle the scaleModAmount here!
+            // hpScale = getMobMod(MOBMOD_HP_SCALE) / 100.0f
+
+            if (lvl > 75)
+                growth = 1.28;
+            else if (lvl > 65)
+                growth = 1.27;
+            else if (lvl > 55)
+                growth = 1.25;
+            else if (lvl > 50)
+                growth = 1.21;
+            else if (lvl > 45)
+                growth = 1.17;
+            else if (lvl > 35)
+                growth = 1.14;
+            else if (lvl > 25)
+                growth = 1.1;
+
+            maxhp = Math.floor(base * Math.pow(lvl, growth) * scale);
+
+            if (isNM) {
+                maxhp *= 2.0;
+                if (lvl > 75)
+                    maxhp *= 2.5;
+            }
+        } else {
+            maxhp = hp;
+        }
+
+        if (isNM)
+            maxhp *= map_config_nm_multiplier;
+        else
+            maxhp *= map_config_mob_multiplier;
+
+        return Math.floor(maxhp);
+    };
+
+    /**
      * Obtains a list of monsters that match the partial name.
      *
      * @param {string} name                     The name to lookup.
@@ -94,9 +153,11 @@ module.exports = function (arcanus) {
 
         // Query the base monster to obtain their basic stats.
         tasks.push(function (callback) {
-            const sql = `SELECT sp.*, mg.*, zs.zoneid AS zoneid, zs.name AS zonename FROM mob_spawn_points AS sp
+            const sql = `SELECT sp.*, mg.*, mfs.HP as familyHP, mp.mobType, zs.zoneid AS zoneid, zs.name AS zonename FROM mob_spawn_points AS sp
                          INNER JOIN mob_groups AS mg ON sp.groupid = mg.groupid
                          INNER JOIN zone_settings AS zs ON mg.zoneid = zs.zoneid
+                         INNER JOIN mob_pools AS mp ON mp.poolid = mg.poolid
+                         INNER JOIN mob_family_system AS mfs ON mfs.familyid = mp.familyid
                          WHERE mobid = ? LIMIT 1;`;
 
             arcanus.db.query(sql, [mobid], function (err, row) {
@@ -111,10 +172,12 @@ module.exports = function (arcanus) {
                     dropid: row[0].dropid,
                     groupid: row[0].groupid,
                     name: row[0].polutils_name,
+                    familyhp: row[0].familyHP,
                     hp: row[0].HP,
                     mp: row[0].MP,
                     minlevel: row[0].minLevel,
                     maxlevel: row[0].maxLevel,
+                    mobtype: row[0].mobType,
                     poolid: row[0].poolid,
                     pos_x: row[0].pos_x,
                     pos_y: row[0].pos_y,
@@ -152,6 +215,20 @@ module.exports = function (arcanus) {
 
                 return callback();
             });
+        });
+
+        // Calculate the monsters true health value.
+        tasks.push(function (callback) {
+            // Calculate the health..
+            var isNM = (monster.mobtype & 0x02) == 0x02;
+            var minhp = getMonstersHealth(monster.minlevel, monster.hp, monster.familyhp, monster.mobtype, 0);
+            var maxhp = getMonstersHealth(monster.maxlevel, monster.hp, monster.familyhp, monster.mobtype, 0);
+
+            // Store the health ranges into the monster data..
+            monster.minhp = minhp;
+            monster.maxhp = maxhp;
+
+            return callback();
         });
 
         // Block monsters that are blacklisted from showing important information.

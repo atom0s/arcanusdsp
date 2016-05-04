@@ -19,7 +19,7 @@
         </div>
     </div>
 
-    <div class="alert alert-warning monster-invalid" ng-show="(monster.pos_x == 0 && monster.pos_y == 0 && monster.pos_z == 0) || monster.hp == 0">
+    <div class="alert alert-warning monster-invalid" ng-show="(monster.pos_x == 0 && monster.pos_y == 0 && monster.pos_z == 0) || monster.minhp == 0">
         <strong>Warning: </strong> This monster appears to be invalid or not implemented.
     </div>
 
@@ -34,7 +34,7 @@
                         </td>
                         <td class="monster-stats-container">
                             <span>
-                                <strong>HP: </strong> {{monster.hp | number}}
+                                <strong>HP: </strong> {{monster.minhp | number}} ~ {{monster.maxhp | number}}
                                 <br />
                                 <strong>MP: </strong> {{monster.mp | number}}
                             </span>
@@ -45,7 +45,9 @@
                             <table class="table-condensed monster-data-container">
                                 <tr>
                                     <td class="header"><strong>Respawn:</strong></td>
-                                    <td class="value">{{monster.respawntime | respawnTime}}</td>
+                                    <td class="value">
+                                        {{isScriptedMonster(monster.spawntype) ? 'Scripted' : (monster.respawntime | respawnTime)}}
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td class="header"><strong>Spawn Flags:</strong></td>
@@ -83,7 +85,7 @@
                         <td class="gm-command" colspan="2">
                             <img src="/public/img/ffxi/nameflags/gm.png" alt="gm" />
                             <strong>GM Command:</strong>
-                            <input type="text" readonly value="@@pos {{monster.pos_x}} {{monster.pos_y}} {{monster.pos_z}} {{monster.zoneid}}" />
+                            <input size="30" type="text" readonly value="@@pos {{monster.pos_x}} {{monster.pos_y}} {{monster.pos_z}} {{monster.zoneid}}" />
                         </td>
                     </tr>
                 </table>

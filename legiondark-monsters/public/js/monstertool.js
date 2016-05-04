@@ -77,6 +77,16 @@ legion.controller('monsterToolController', ['$filter', '$http', '$sce', '$scope'
             document.querySelector('title').innerHTML = (err) ? 'Failed To Load Monster!' : $filter('cleanNameTitleCase')($scope.monster.name) + ' &bull; Viewing Monster';
         });
     };
+
+    /**
+     * Determines if a monsters spawn information is scripted.
+     *
+     * @param {number} s            The monsters spawn flags.
+     * @returns {boolean}           True if scripted, false otherwise.
+     */
+    $scope.isScriptedMonster = function (s) {
+        return !!(s == 128 || (s & 128) == 128);
+    };
 }]);
 
 /**
