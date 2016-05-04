@@ -348,6 +348,48 @@
             </td>
         </tr>
         <tr>
+            <td class="item-info-container" colspan="3">
+                <table class="table table-bordered table-condensed item-ah-table">
+                    <tr>
+                        <th colspan="6" class="item-ah-heading">Auction House History <em>
+                            <small>(Last 10 Transactions)</small>
+                        </em></th>
+                    </tr>
+                    <tr class="item-ah-headers">
+                        <td class="heading" width="32px"></td>
+                        <td class="heading">Item</td>
+                        <td class="heading">Date</td>
+                        <td class="heading">Seller</td>
+                        <td class="heading">Buyer</td>
+                        <td class="heading">Price</td>
+                    </tr>
+                    <tbody class="item-ah-items">
+                        <tr ng-repeat="ah in item.ahhistory" repeat-done="refreshTooltips()">
+                            <td class="icon">
+                                <a ng-href="http://www.ffxiah.com/item/{{ah.itemid}}">
+                                    <img ng-src="http://static.ffxiah.com/images/mini-icons/{{ah.itemid}}.png" />
+                                </a>
+                            </td>
+                            <td class="name">
+                                <a ng-href="/db/items/{{ah.itemid}}/{{ah.itemname}}">
+                                    {{ah.itemname | cleanNameTitleCase}}
+                                </a>
+                            </td>
+                            <td class="name">{{ah.sell_date * 1000 | date}}</td>
+                            <td class="name">{{ah.seller_name}}</td>
+                            <td class="name">{{ah.buyer_name}}</td>
+                            <td class="name">{{ah.sale | currency:"$":0}}</td>
+                        </tr>
+                    </tbody>
+                    <tbody ng-show="item.ahhistory.length == 0">
+                        <tr>
+                            <td colspan="6" class="noitems">There is no AH history to display!</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <tr>
             <td>
                 <!-- Item Bazaar Information -->
                 <table class="table table-bordered table-condensed table-hover item-information-table">

@@ -411,6 +411,32 @@ module.exports = function (arcanus) {
             });
         });
 
+        // Query for auction history of this item..
+        tasks.push(function (callback) {
+            const sql = `SELECT ah.itemid, ah.seller_name, ah.buyer_name, ah.sale, ah.sell_date, COALESCE(ita.name,itb.name,itf.name,itp.name,itw.name) AS itemname FROM auction_house AS ah
+                         LEFT JOIN item_armor AS ita ON ah.itemid = ita.itemid
+                         LEFT JOIN item_basic AS itb ON ah.itemid = itb.itemid
+                         LEFT JOIN item_furnishing AS itf ON ah.itemid = itf.itemid
+                         LEFT JOIN item_puppet AS itp ON ah.itemid = itp.itemid
+                         LEFT JOIN item_weapon AS itw ON ah.itemid = itw.itemid
+                         WHERE ah.itemid = ? AND ah.sell_date != 0
+                         ORDER BY ah.sell_date DESC LIMIT 10;`;
+
+            item.ahhistory = [];
+
+            arcanus.db.query(sql, [item.itemid], function (err, rows) {
+                if (err)
+                    return callback(err);
+
+                // Set the item auction history..
+                rows.forEach(function (r) {
+                    item.ahhistory.push(r);
+                });
+
+                return callback();
+            });
+        });
+
         // Perform the queries..
         async.series(tasks, function (err) {
             return done(err ? new Error('Failed to obtain the item.') : null, err ? null : item);
