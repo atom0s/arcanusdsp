@@ -27,6 +27,8 @@
 
 var express = require('express');
 var router = express.Router();
+var fs = require('fs');
+var path = require('path');
 var socket = require('net');
 
 /**
@@ -98,6 +100,62 @@ module.exports = function (arcanus) {
 
         // Complete the connection..
         client.end();
+    });
+
+    /**
+     * Gets the servers client version requirement.
+     *
+     * @param {object} req                      The request object.
+     * @param {object} res                      The response object.
+     * @param {function} next                   The callback function to continue the request chain.
+     */
+    router.get('/serverversion', function (req, res, next) {
+        // Check the cache..
+        var cacheValue = arcanus.cache.get('serverversion');
+        if (cacheValue != undefined) {
+            return res.status(200).send(cacheValue);
+        }
+
+        // Obtain the configurations..
+        var cfg = arcanus.config.darkstar || null;
+        if (!cfg || !cfg.path)
+            return res.status(204).send('Unknown');
+
+        var data = fs.readFileSync(path.join(cfg.path, 'version.info'));
+        if (data.indexOf('CLIENT_VER:') > 0) {
+
+            var s = data.indexOf('CLIENT_VER:');
+            var e = data.indexOf('\n', s);
+            var r = data.toString().substring(s + 11, e - 1).trim();
+
+            if (r) {
+                arcanus.cache.set('serverversion', r, 60 * 5);
+                return res.status(200).send(r);
+            }
+
+            return res.status(200).send('Unknown');
+        } else {
+            arcanus.cache.set('serverversion', 'Unknown', 60 * 5);
+            return res.status(204).send('Unknown');
+        }
+/*
+        // Connects to the server to determine if it's currently online..
+        var client = socket.connect({
+            host: cfg.host,
+            port: cfg.port
+        }, function () {
+            arcanus.cache.set('serverstatus', true, 120);
+            return res.status(200).send(true);
+        });
+
+        // Error handler..
+        client.on('error', function (err) {
+            arcanus.cache.set('serverstatus', false, 120);
+            return res.status(204).send(false);
+        });
+
+        // Complete the connection..
+        client.end();*/
     });
 
     /**

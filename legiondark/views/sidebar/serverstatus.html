@@ -1,4 +1,4 @@
-<div id="server-status" class="widget" data-ng-init="getServerOnlineStatus()" ng-class="{'widget-orange': serverstatus == null, 'widget-red': serverstatus == false, 'widget-green': serverstatus == true}">
+<div id="server-status" class="widget" data-ng-init="getServerOnlineStatus(); getServerClientVersion()" ng-class="{'widget-orange': serverstatus == null, 'widget-red': serverstatus == false, 'widget-green': serverstatus == true}">
     <div class="widget-heading">
         <div class="widget-title">
             <span>Server Status</span>
@@ -21,5 +21,7 @@
                 <img src="/public/img/onlinestatus/offline.png" /> Offline!
             </strong>
         </div>
+        <hr />
+        <strong>Expected Client Version:</strong> <span ng-bind="serverversion"></span>
     </div>
 </div>

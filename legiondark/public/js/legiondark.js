@@ -45,6 +45,7 @@ legion.controller('legionController', ['$filter', '$http', '$sce', '$scope', '$w
 
     // Sidebar variables..
     $scope.serverstatus = null;
+    $scope.serverversion = '';
     $scope.onlinecharacters = null;
 
     // Modal dialog variables..
@@ -157,6 +158,21 @@ legion.controller('legionController', ['$filter', '$http', '$sce', '$scope', '$w
         $scope.serverstatus = null;
         $scope.makeAjaxQuery(opts, function (err, res) {
             $scope.serverstatus = (err) ? false : (res === true);
+        });
+    };
+
+    /**
+     * Obtains the expected client version number.
+     *
+     * @private
+     * @static
+     */
+    $scope.getServerClientVersion = function () {
+        var opts = { method: 'GET', url: '/ajax/serverversion', params: {} };
+
+        $scope.serverversion = '';
+        $scope.makeAjaxQuery(opts, function (err, res) {
+            $scope.serverversion = (err) ? '' : res;
         });
     };
 
