@@ -138,24 +138,6 @@ module.exports = function (arcanus) {
             arcanus.cache.set('serverversion', 'Unknown', 60 * 5);
             return res.status(204).send('Unknown');
         }
-/*
-        // Connects to the server to determine if it's currently online..
-        var client = socket.connect({
-            host: cfg.host,
-            port: cfg.port
-        }, function () {
-            arcanus.cache.set('serverstatus', true, 120);
-            return res.status(200).send(true);
-        });
-
-        // Error handler..
-        client.on('error', function (err) {
-            arcanus.cache.set('serverstatus', false, 120);
-            return res.status(204).send(false);
-        });
-
-        // Complete the connection..
-        client.end();*/
     });
 
     /**
