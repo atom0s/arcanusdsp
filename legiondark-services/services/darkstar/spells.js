@@ -65,15 +65,15 @@ module.exports = function (arcanus) {
      * @param {function} done                   The callback to invoke when the function has completed.
      */
     SpellModule.getBlueSpellById = function (spellid, done) {
-        const sql = `SELECT bsl.spellid, sl.name, mg.zoneid, zs.name AS zonename, msp.* FROM dspdb.blue_spell_list AS bsl
-                     LEFT JOIN spell_list AS sl ON bsl.spellid = sl.spellid
-                     LEFT JOIN mob_skills AS ms ON bsl.mob_skill_id = ms.mob_skill_id
-                     LEFT JOIN mob_pools AS mp ON ms.family_id = mp.familyid
-                     LEFT JOIN mob_groups AS mg ON mp.poolid = mg.poolid
-                     LEFT JOIN mob_spawn_points AS msp ON mg.groupid = msp.groupid
-                     LEFT JOIN zone_settings AS zs ON mg.zoneid = zs.zoneid
-                     WHERE bsl.spellid = ? AND mobid IS NOT null;`;
-
+        const sql = `SELECT bsl.spellid, ms.mob_skill_name, mg.zoneid, zs.name AS zonename, msp.* FROM mob_spawn_points AS msp
+                    LEFT JOIN mob_groups AS mg ON mg.groupid = msp.groupid
+                    LEFT JOIN zone_settings AS zs ON mg.zoneid = zs.zoneid
+                    LEFT JOIN mob_pools AS mp ON mp.poolid = mg.poolid
+                    LEFT JOIN mob_skill_lists AS msl ON msl.skill_list_id = mp.skill_list_id
+                    LEFT JOIN mob_skills AS ms ON ms.mob_skill_id = msl.mob_skill_id
+                    LEFT JOIN blue_spell_list AS bsl ON bsl.mob_skill_id = ms.mob_skill_id
+                    WHERE bsl.spellid = ? AND mobid IS NOT null;`;
+                    
         arcanus.db.query(sql, [spellid], function (err, rows) {
             if (err)
                 return done(err, false);
