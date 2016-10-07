@@ -98,7 +98,7 @@ module.exports = function (arcanus) {
             children: [
                 {
                     alias: 'guide-01',
-                    href: 'http://legiondark.com/forums/viewtopic.php?f=40&t=2',
+                    href: 'http://legiondark.com/forums/viewtopic.php?f=40&t=1746',
                     icon: 'fa-sticky-note-o',
                     title: 'Installation Guide'
                 },
