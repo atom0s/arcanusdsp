@@ -39,6 +39,31 @@ module.exports = function (arcanus) {
     var CharacterModule = {};
 
     /**
+     * Determines if the players nameflags have a GM flag enabled.
+     * 
+     * @param {int} flags                       The characters nameflags to test.
+     * @return {bool}                           True if a flag is present, false otherwise. 
+     */
+    var hasGmFlag = function(flags) {
+        // GM - PlayOnline
+        if ((flags & 0x00010000) == 0x00010000)
+            return true;
+        // GM - Standard GM
+        if ((flags & 0x04000000) == 0x04000000)
+            return true;
+        // GM - Senior
+        if ((flags & 0x05000000) == 0x05000000)
+            return true;
+        // GM - Lead
+        if ((flags & 0x06000000) == 0x06000000)
+            return true;
+        // GM - Producer
+        if ((flags & 0x07000000) == 0x07000000)
+            return true;
+        return false;
+    }
+
+    /**
      * Gets a list of current online characters.
      *
      * @param {function} done                   The callback to invoke when the function has completed.
@@ -71,6 +96,10 @@ module.exports = function (arcanus) {
                 if ((((c.nameflags & 0x1000) === 0x1000) && c.gmlevel > 0) || c.ishidden)
                     return;
 
+                if (!hasGmFlag(c.nameflags))
+                    c.gmlevel = 0;
+                
+
                 // Convert the linkshell colors to html colors..
                 c.ls1color = ffxi.getLinkshellHtmlColor(c.ls1color);
                 c.ls2color = ffxi.getLinkshellHtmlColor(c.ls2color);
@@ -90,6 +119,15 @@ module.exports = function (arcanus) {
 
                 // Add the player to the character list..
                 characters.push(c);
+            });
+
+            characters.sort(function (char1, char2) {
+                if (char1.gmlevel > 0 && char1.gmlevel > char2.gmlevel)
+                    return -1;
+
+                if (char1.charname < char2.charname) return -1;
+                if (char1.charname > char2.charname) return 1;
+                return 0;
             });
 
             // Return the online characters..
