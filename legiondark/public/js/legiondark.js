@@ -389,7 +389,7 @@ legion.filter('nameflagsToImages', ['$sce', function ($sce) {
 
         switch (gmLevel) {
             case 1:
-                imgs += '<img src="/public/img/ffxi/nameflags/gm.png" alt="Game Master" title="Game Master" />';
+                imgs += '<img src="/public/img/ffxi/nameflags/pol.png" alt="Game Master" title="Game Master" />';
                 break;
             case 2:
                 imgs += '<img src="/public/img/ffxi/nameflags/sgm.png" alt="Game Master" title="Game Master" />';
