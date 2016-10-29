@@ -149,19 +149,19 @@ module.exports = function (arcanus) {
      */
     router.get('/onlinecharacters', function (req, res, next) {
         // Check the cache..
-        var cacheValue = arcanus.cache.get('onlinecharacters');
-        if (cacheValue != undefined) {
-            return res.status(200).send(cacheValue);
-        }
+        //var cacheValue = arcanus.cache.get('onlinecharacters');
+        //if (cacheValue != undefined) {
+        //    return res.status(200).send(cacheValue);
+        //}
 
         // Obtain the characters from the DarkStar service..
         var dsService = arcanus.services.get('darkstarservice');
         dsService.Characters.getOnlineCharacters(function (err, characters) {
             var status = (err || characters === null) ? 500 : 200;
 
-            if (status === 200) {
-                arcanus.cache.set('onlinecharacters', characters, 120);
-            }
+            //if (status === 200) {
+            //    arcanus.cache.set('onlinecharacters', characters, 120);
+            //}
 
             return res.status(status).send(characters);
         });

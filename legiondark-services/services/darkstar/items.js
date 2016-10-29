@@ -437,6 +437,19 @@ module.exports = function (arcanus) {
             });
         });
 
+        // Query for auction stock amount..
+        tasks.push(function (callback) {
+            const sql = `SELECT COUNT(*) AS count FROM auction_house WHERE itemid = ? AND sell_date = 0;`;
+            arcanus.db.query(sql, [item.itemid], function (err, rows) {
+                if (err)
+                    item.ahstock = 0;
+                else
+                    item.ahstock = rows[0]['count'];
+
+                return callback();
+            });
+        });
+
         // Perform the queries..
         async.series(tasks, function (err) {
             return done(err ? new Error('Failed to obtain the item.') : null, err ? null : item);

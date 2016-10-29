@@ -70,7 +70,7 @@ module.exports = function (arcanus) {
      */
     CharacterModule.getOnlineCharacters = function (done) {
         const sql = `SELECT c.charid, c.charname, cs.nameflags, c.pos_zone, c.gmlevel, ls1.name AS ls1name, ls2.name AS ls2name, ls1.color AS ls1color, ls2.color AS ls2color, s.linkshellrank1 AS ls1rank, s.linkshellrank2 AS ls2rank, cs.mjob, cs.sjob, cs.mlvl, cs.slvl, c.isnewplayer, c.mentor, cj.*, z.name AS zonename,
-                     (SELECT COUNT(*) FROM char_vars AS cv WHERE cv.charid = c.charid AND cv.value LIKE '%gmhidden%') AS ishidden
+                     (SELECT COUNT(*) FROM char_vars AS cv WHERE cv.charid = c.charid AND cv.varname LIKE '%gmhidden%') AS ishidden
                      FROM accounts_sessions AS s
                      LEFT JOIN chars AS c ON s.charid = c.charid
                      LEFT JOIN linkshells AS ls1 ON s.linkshellid1 = ls1.linkshellid
@@ -92,13 +92,17 @@ module.exports = function (arcanus) {
                 if (!arcanus.utils.isNonEmptyString(c.charname))
                     return;
 
-                // Check if the player is GM hidden..
-                if ((((c.nameflags & 0x1000) === 0x1000) && c.gmlevel > 0) || c.ishidden)
+                // Skip hidden players..
+                if (c.ishidden >= 1)
                     return;
 
+                // Hide players GM status if their flag is off..
                 if (!hasGmFlag(c.nameflags))
                     c.gmlevel = 0;
-                
+
+                // Skip GMs that are anon (/anon)..
+                if (((c.nameflags & 0x00001000) === 0x00001000) && c.gmlevel > 0)
+                    return;
 
                 // Convert the linkshell colors to html colors..
                 c.ls1color = ffxi.getLinkshellHtmlColor(c.ls1color);
@@ -122,12 +126,13 @@ module.exports = function (arcanus) {
             });
 
             characters.sort(function (char1, char2) {
-                if (char1.gmlevel > 0 && char1.gmlevel > char2.gmlevel)
+                var nameorder = char1.charname === char2.charname ? 0 : (char1.charname < char2.charname ? -1 : 1);
+                if ((char1.gmlevel > 0 && char2.gmlevel > 0) || (char1.gmlevel === 0 && char2.gmlevel === 0))
+                    return nameorder;
+                else if (char1.gmlevel > 0)
                     return -1;
 
-                if (char1.charname < char2.charname) return -1;
-                if (char1.charname > char2.charname) return 1;
-                return 0;
+                return 1;
             });
 
             // Return the online characters..
