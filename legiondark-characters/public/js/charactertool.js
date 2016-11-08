@@ -123,9 +123,9 @@ legion.filter('equipmentBlock', ['$sce', function ($sce) {
 
         // Build the item block..
         val++;
-        var img = `<div class="character-equip-slot"><img src="http://static.ffxiah.com/images/eq` + val + `.gif"></div>`;
+        var img = '<div class="character-equip-slot"><img src="http://static.ffxiah.com/images/eq' + val + '.gif"></div>';
         if (itemId !== 0) {
-            img = `<div class="character-equip-slot"><a href="http://www.ffxiah.com/item/` + itemId + `"><img src="http://static.ffxiah.com/images/icon/` + itemId + `.png"></a></div>`;
+            img = '<div class="character-equip-slot"><a href="http://www.ffxiah.com/item/' + itemId + '"><img src="http://static.ffxiah.com/images/icon/' + itemId + '.png"></a></div>';
         }
 
         // Return as trusted html..
