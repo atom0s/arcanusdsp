@@ -411,6 +411,12 @@ module.exports = function (arcanus) {
             });
         });
 
+        // Allow admins to see more AH history..
+        var amount = 10;
+        if (isAdmin) {
+            amount = 100;
+        }
+
         // Query for auction history of this item..
         tasks.push(function (callback) {
             const sql = `SELECT ah.itemid, ah.seller_name, ah.buyer_name, ah.sale, ah.sell_date, COALESCE(ita.name,itb.name,itf.name,itp.name,itw.name) AS itemname FROM auction_house AS ah
@@ -420,11 +426,11 @@ module.exports = function (arcanus) {
                          LEFT JOIN item_puppet AS itp ON ah.itemid = itp.itemid
                          LEFT JOIN item_weapon AS itw ON ah.itemid = itw.itemid
                          WHERE ah.itemid = ? AND ah.sell_date != 0
-                         ORDER BY ah.sell_date DESC LIMIT 10;`;
+                         ORDER BY ah.sell_date DESC LIMIT ?;`;
 
             item.ahhistory = [];
 
-            arcanus.db.query(sql, [item.itemid], function (err, rows) {
+            arcanus.db.query(sql, [item.itemid, amount], function (err, rows) {
                 if (err)
                     return callback(err);
 

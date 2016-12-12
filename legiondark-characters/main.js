@@ -113,18 +113,24 @@ module.exports = function (arcanus) {
         if (!charid)
             return res.status(204).send(null);
 
+        // Determine if the request is by an admin..
+        var isAdmin = false;
+        if (req.user && req.user.priv > 1)
+            isAdmin = true;
+
         // Check the cache..
-        var cacheValue = arcanus.cache.get('character-profile-' + charid.toString());
+        var cacheString = isAdmin ? 'character-profile-' + charid.toString() + '-admin' : 'character-profile-' + charid.toString();
+        var cacheValue = arcanus.cache.get(cacheString);
         if (cacheValue != undefined) {
             return res.status(200).send(cacheValue);
         }
 
         // Obtain the character by their charid..
-        arcanus.services.get('darkstarservice').Characters.getCharacterById(charid, function (err, character) {
+        arcanus.services.get('darkstarservice').Characters.getCharacterById(charid, isAdmin, function (err, character) {
             var status = (err) ? 400 : 200;
 
             if (status === 200) {
-                arcanus.cache.set('character-profile-' + charid.toString(), character, 600);
+                arcanus.cache.set(cacheString, character, 600);
             }
 
             res.status(status).send(character);

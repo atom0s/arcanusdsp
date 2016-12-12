@@ -229,9 +229,10 @@ module.exports = function (arcanus) {
      * Gets a characters profile by their character id.
      *
      * @param {number} charid                   The character id to obtain the profile for.
+     * @param {boolean} isAdmin                 Boolean if the request was made by an admin.
      * @param {function} done                   The callback to invoke when the function has completed.
      */
-    CharacterModule.getCharacterById = function (charid, done) {
+    CharacterModule.getCharacterById = function (charid, isAdmin, done) {
         var character = null;
         var tasks = [];
 
@@ -408,9 +409,15 @@ module.exports = function (arcanus) {
                          LEFT JOIN item_puppet AS itp ON ah.itemid = itp.itemid
                          LEFT JOIN item_weapon AS itw ON ah.itemid = itw.itemid
                          WHERE ah.seller = ? OR ah.buyer_name = ? AND ah.sell_date != 0
-                         ORDER BY ah.sell_date DESC LIMIT 10;`;
+                         ORDER BY ah.sell_date DESC LIMIT ?;`;
 
-            arcanus.db.query(sql, [charid, character.charname], function (err, rows) {
+            // Allow admins to see extended history..
+            var amount = 10;
+            if (isAdmin) {
+                amount = 75;
+            }
+
+            arcanus.db.query(sql, [charid, character.charname, amount], function (err, rows) {
                 if (err)
                     return callback(err);
 
