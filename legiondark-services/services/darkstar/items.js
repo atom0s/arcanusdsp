@@ -385,6 +385,26 @@ module.exports = function (arcanus) {
             });
         });
 
+        // Query for the monsters that drop this item (scripted)..
+        tasks.push(function (callback) {
+            const sql = `SELECT sp.mobid, dl.rate, g.zoneid, sp.mobname, sp.polutils_name, sp.pos_x, sp.pos_y, sp.pos_z, z.name AS zonename FROM mob_droplist_scripted as dl
+                         LEFT JOIN mob_groups AS g ON dl.dropid = g.dropid
+                         LEFT JOIN mob_spawn_points AS sp ON g.groupid = sp.groupid
+                         LEFT JOIN zone_settings AS z ON g.zoneid = z.zoneid
+                         WHERE itemid = ? ORDER BY polutils_name ASC;`;
+
+            arcanus.db.query(sql, [item.itemid], function (err, rows) {
+                if (err)
+                    return callback();
+
+                rows.forEach(function (r) {
+                    item.drops.push(r);
+                });
+
+                return callback();
+            });
+        });
+
         // Query for players with this item in their bazaar..
         tasks.push(function (callback) {
             const sql = `SELECT c.charid, c.charname, ci.itemid, ci.bazaar, COALESCE(ita.name,itb.name,itf.name,itp.name,itw.name) AS itemname FROM char_inventory AS ci

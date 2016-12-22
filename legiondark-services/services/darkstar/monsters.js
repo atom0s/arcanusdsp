@@ -217,6 +217,30 @@ module.exports = function (arcanus) {
             });
         });
 
+        // Query for the monsters drops (scripted).
+        tasks.push(function (callback) {
+            const sql = `SELECT dl.itemid, dl.rate, COALESCE(ita.name, itb.name, itf.name, itp.name, itw.name) AS itemname FROM mob_droplist_scripted AS dl
+                         LEFT JOIN item_armor AS ita ON dl.itemid = ita.itemid
+                         LEFT JOIN item_basic AS itb ON dl.itemid = itb.itemid
+                         LEFT JOIN item_furnishing AS itf ON dl.itemid = itf.itemid
+                         LEFT JOIN item_puppet AS itp ON dl.itemid = itp.itemid
+                         LEFT JOIN item_weapon AS itw ON dl.itemid = itw.itemid
+                         WHERE dropid = ?;`;
+
+            arcanus.db.query(sql, [monster.dropid], function (err, rows) {
+                // Handle errors..
+                if (err)
+                    return callback(err);
+
+                // Build the drop list..
+                rows.forEach(function (drop) {
+                    monster.drops.push(drop);
+                });
+
+                return callback();
+            });
+        });
+
         // Calculate the monsters true health value.
         tasks.push(function (callback) {
             // Calculate the health..
