@@ -239,7 +239,7 @@ module.exports = function (arcanus) {
         // 1. Query for the character to obtain their basic stats..
         tasks.push(function (callback) {
             const sql = `SELECT c.charid, c.accid, c.charname, c.nation, c.pos_zone, c.home_zone, c.gmlevel, c.isnewplayer, c.mentor, cl.face, cl.race, cl.size, cp.rank_sandoria, cp.rank_bastok, cp.rank_windurst,
-                                cs.nameflags, cs.mjob, cs.sjob, cs.title, cs.mlvl, cs.slvl, COUNT(acs.charid) AS isonline, act.timelastmodify,
+                                cs.nameflags, cs.mjob, cs.sjob, cs.title, cs.mlvl, cs.slvl, COUNT(acs.charid) AS isonline, UNIX_TIMESTAMP(act.timelastmodify) AS timelastmodify,
                          (SELECT COUNT(*) FROM char_vars AS cv WHERE cv.charid = c.charid AND cv.value LIKE '%gmhidden%') AS ishidden
                          FROM chars AS c
                          LEFT JOIN char_look AS cl ON c.charid = cl.charid
@@ -266,6 +266,8 @@ module.exports = function (arcanus) {
                 character.equipment = {};
                 character.jobs = [{ id: 0, name: '', level: 0 }];
                 character.jobsrows = [];
+                
+                character.timelastmodify = row[0].timelastmodify * 1000;
 
                 // Set the characters default rank..
                 switch (character.nation) {

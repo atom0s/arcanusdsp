@@ -33,6 +33,9 @@
                                 <tr>
                                     <td class="character-name" width="100%">
                                         <strong>{{character.charname}}</strong>
+                                        <span ng-show="character.isonline == 0" style="font-size: 10px; font-style: italic; font-weight: normal;">
+                                            (Last online: {{character.timelastmodify | date:'medium'}})
+                                        </span>
                                     </td>
                                     <td class="character-icons">
                                         <div class="icons" ng-bind-html="character | nameflagsToImages" ng-cloak></div>
