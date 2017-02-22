@@ -696,7 +696,7 @@ legion.filter('itemMod', function () {
             }
         }
 
-        return 'Unknown Mod';
+        return 'Unknown Mod (' + val.modid + ')';
     };
 });
 

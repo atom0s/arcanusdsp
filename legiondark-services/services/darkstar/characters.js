@@ -121,6 +121,13 @@ module.exports = function (arcanus) {
                         delete c[ffxi.getJobAbbrById(x)]
                 }
 
+                if (c.gmlevel > 0) {
+                    c.ls1name = '';
+                    c.ls2name = '';
+                    c.ls1color= 0;
+                    c.ls2color= 0;
+                }
+                
                 // Add the player to the character list..
                 characters.push(c);
             });
@@ -266,6 +273,7 @@ module.exports = function (arcanus) {
                 character.equipment = {};
                 character.jobs = [{ id: 0, name: '', level: 0 }];
                 character.jobsrows = [];
+                character.gmlevel = row[0].gmlevel;
                 
                 character.timelastmodify = row[0].timelastmodify * 1000;
 
@@ -478,10 +486,14 @@ module.exports = function (arcanus) {
                     character.linkshells.push(linkshell);
                 });
 
+                if (character.gmlevel > 0) {
+                    character.linkshells = [];
+                }
+                
                 return callback();
             });
         });
-
+        
         // Run the queries to build the character profile..
         async.series(tasks, function (err) {
             return done(err ? new Error('Failed to obtain character profile.') : null, err ? null : character);
