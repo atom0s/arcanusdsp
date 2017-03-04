@@ -242,12 +242,13 @@ module.exports = function (arcanus) {
     CharacterModule.getCharacterById = function (charid, isAdmin, done) {
         var character = null;
         var tasks = [];
+        var isGmHidden = false;
 
         // 1. Query for the character to obtain their basic stats..
         tasks.push(function (callback) {
             const sql = `SELECT c.charid, c.accid, c.charname, c.nation, c.pos_zone, c.home_zone, c.gmlevel, c.isnewplayer, c.mentor, cl.face, cl.race, cl.size, cp.rank_sandoria, cp.rank_bastok, cp.rank_windurst,
                                 cs.nameflags, cs.mjob, cs.sjob, cs.title, cs.mlvl, cs.slvl, COUNT(acs.charid) AS isonline, UNIX_TIMESTAMP(act.timelastmodify) AS timelastmodify,
-                         (SELECT COUNT(*) FROM char_vars AS cv WHERE cv.charid = c.charid AND cv.value LIKE '%gmhidden%') AS ishidden
+                         (SELECT COUNT(*) FROM char_vars AS cv WHERE cv.charid = c.charid AND cv.varname LIKE '%gmhidden%') AS ishidden
                          FROM chars AS c
                          LEFT JOIN char_look AS cl ON c.charid = cl.charid
                          LEFT JOIN char_profile AS cp ON c.charid = cp.charid
@@ -274,6 +275,12 @@ module.exports = function (arcanus) {
                 character.jobs = [{ id: 0, name: '', level: 0 }];
                 character.jobsrows = [];
                 character.gmlevel = row[0].gmlevel;
+                
+                if (row[0].ishidden >= 1)
+                    isGmHidden = true;
+                
+                delete character.ishidden;
+                delete character.gmlevel;
                 
                 character.timelastmodify = row[0].timelastmodify * 1000;
 
@@ -486,7 +493,7 @@ module.exports = function (arcanus) {
                     character.linkshells.push(linkshell);
                 });
 
-                if (character.gmlevel > 0) {
+                if (isGmHidden == true) {
                     character.linkshells = [];
                 }
                 
