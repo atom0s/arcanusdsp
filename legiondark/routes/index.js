@@ -64,6 +64,21 @@ module.exports = function (arcanus) {
         res.render('chat', res.model);
     });
 
+    /**
+     * Gets the online list for mobile users.
+     *
+     * @param {object} req                      The request object.
+     * @param {object} res                      The response object.
+     * @param {function} next                   The callback function to continue the request chain.
+     */
+    router.get('/whosonline', function (req, res, next) {
+        res.model.site.meta.setTitle('Whos Online');
+        res.model.site.meta.description = 'Displays a list of currently online players.';
+
+        // Render the page..
+        res.render('whosonline', res.model);
+    });
+
     // Return the router..
     return router;
 };

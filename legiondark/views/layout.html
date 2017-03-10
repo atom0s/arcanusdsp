@@ -31,6 +31,10 @@
         <div class="container-fluid content">
             <div class="row row-slim-padding">
                 <div class="col-md-9">
+                    <div class="server-status hidden-md hidden-lg hidden-xl" style="padding: 0 0 5px 0;">
+                        @html.include('/sidebar/serverstatus_slim')
+                    </div>
+
                     <!-- Information messages. -->
                     @html.include('messages')
 

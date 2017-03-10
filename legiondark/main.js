@@ -88,7 +88,18 @@ module.exports = function (arcanus) {
             href: '',
             icon: 'fa-database',
             title: 'Database Tools',
-            children: []
+            children: [
+                {
+                    alias: 'whosoinline',
+                    href: 'http://legiondark.com/whosonline/',
+                    icon: 'fa-list',
+                    title: 'Whos Online (Mobile)',
+                },
+                {
+                    alias: 'database-sep00',
+                    separator: true
+                },
+            ]
         },
         {
             alias: 'guides',
