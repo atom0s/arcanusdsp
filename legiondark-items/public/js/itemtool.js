@@ -692,11 +692,11 @@ legion.filter('itemMod', function () {
 
         for (var k in mods) {
             if (mods.hasOwnProperty(k) && k == val.modid) {
-                return sprintf(mods[k].fmt, val.value).replace(/\+-/, '-');
+                return '(' + val.modid + '): ' + sprintf(mods[k].fmt, val.value).replace(/\+-/, '-');
             }
         }
 
-        return 'Unknown Mod (' + val.modid + ')';
+        return 'Unknown Mod (' + val.modid + ') ' + val.value;
     };
 });
 

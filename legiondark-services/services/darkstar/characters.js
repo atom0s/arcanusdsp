@@ -474,7 +474,7 @@ module.exports = function (arcanus) {
         // 7. Query for the characters linkshells..
         tasks.push(function (callback) {
             const sql = `SELECT l.linkshellid, l.name, l.color, ci.itemid, ci.slot, ce.equipslotid FROM linkshells AS l
-                         LEFT JOIN char_inventory AS ci ON ASCII(substr(CAST(ci.extra AS CHAR),1,4)) = l.linkshellid AND ci.location = 0
+                         LEFT JOIN char_inventory AS ci ON CONV(HEX(REVERSE(SUBSTRING(CAST(ci.extra AS CHAR), 1, 4))), 16, 10) = l.linkshellid AND ci.location = 0
                          LEFT JOIN char_equip AS ce ON ce.charid = ci.charid AND ce.slotid = ci.slot AND ce.containerid = 0
                          WHERE ce.equipslotid > 0 AND ci.itemid IN (513,514,515) AND ci.charid = ?;`;
             arcanus.db.query(sql, [charid], function (err, rows) {
