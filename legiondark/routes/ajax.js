@@ -156,14 +156,17 @@ module.exports = function (arcanus) {
 
         // Obtain the characters from the DarkStar service..
         var dsService = arcanus.services.get('darkstarservice');
-        dsService.Characters.getOnlineCharacters(function (err, characters) {
+        dsService.Characters.getOnlineCharacters(function (err, characters, count) {
             var status = (err || characters === null) ? 500 : 200;
 
             //if (status === 200) {
             //    arcanus.cache.set('onlinecharacters', characters, 120);
             //}
 
-            return res.status(status).send(characters);
+            return res.status(status).send({
+                "unique": count,
+                "characters": characters
+             });
         });
     });
 

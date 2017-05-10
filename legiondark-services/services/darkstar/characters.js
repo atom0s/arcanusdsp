@@ -142,8 +142,18 @@ module.exports = function (arcanus) {
                 return 1;
             });
 
-            // Return the online characters..
-            return done(null, characters);
+            // Get unique player count..
+            var count = 0;
+            const sql2 = `SELECT COUNT(DISTINCT(client_addr)) AS count FROM dspdb.accounts_sessions;`;
+            arcanus.db.query(sql2, function (err, rows) {
+                if (err)
+                    return done(err, null);
+
+                count = rows[0].count;
+
+                // Return the online characters..
+                return done(null, characters, count);
+            });
         });
     };
 

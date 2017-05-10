@@ -47,6 +47,7 @@ legion.controller('legionController', ['$filter', '$http', '$sce', '$scope', '$w
     $scope.serverstatus = null;
     $scope.serverversion = '';
     $scope.onlinecharacters = null;
+    $scope.uniquecharacters = 0;
 
     // Modal dialog variables..
     $scope.modalDialog = {
@@ -187,7 +188,8 @@ legion.controller('legionController', ['$filter', '$http', '$sce', '$scope', '$w
 
         $scope.onlinecharacters = null;
         $scope.makeAjaxQuery(opts, function (err, res) {
-            $scope.onlinecharacters = (err) ? [] : res;
+            $scope.onlinecharacters = (err) ? [] : res.characters;
+            $scope.uniquecharacters = (err) ? 0 : res.unique;
         });
     };
 
