@@ -144,7 +144,7 @@ module.exports = function (arcanus) {
 
             // Get unique player count..
             var count = 0;
-            const sql2 = `SELECT COUNT(DISTINCT(client_addr)) AS count FROM dspdb.accounts_sessions;`;
+            const sql2 = `SELECT COUNT(DISTINCT(client_addr)) AS count FROM legiondb.accounts_sessions;`;
             arcanus.db.query(sql2, function (err, rows) {
                 if (err)
                     return done(err, null);
@@ -235,7 +235,13 @@ module.exports = function (arcanus) {
                 if (!arcanus.utils.isNonEmptyString(c.charname))
                     return;
 
-                characters.push(c);
+                // Prevent blocked characters from showing..
+                var cfg = arcanus.config.characterService || null;
+                if (cfg === null || !(cfg.blocked instanceof Array))
+                    return;
+                    
+                if (cfg.blocked.indexOf(c.charid) === -1)
+                    characters.push(c);
             });
 
             return done(null, characters);
@@ -274,6 +280,13 @@ module.exports = function (arcanus) {
                 if (err)
                     return callback(err);
                 if (row == null || !row[0].charid)
+                    return callback(new Error('Invalid character id; no found character.'));
+
+                // Prevent blocked characters from showing..
+                var cfg = arcanus.config.characterService || null;
+                if (cfg === null || !(cfg.blocked instanceof Array))
+                    return callback(new Error('Invalid service configuration detected.'));
+                if (cfg.blocked.indexOf(row[0].charid) !== -1)
                     return callback(new Error('Invalid character id; no found character.'));
 
                 // Prepare the character object..
@@ -484,7 +497,7 @@ module.exports = function (arcanus) {
         // 7. Query for the characters linkshells..
         tasks.push(function (callback) {
             const sql = `SELECT l.linkshellid, l.name, l.color, ci.itemid, ci.slot, ce.equipslotid FROM linkshells AS l
-                         LEFT JOIN char_inventory AS ci ON CONV(HEX(REVERSE(SUBSTRING(CAST(ci.extra AS CHAR), 1, 4))), 16, 10) = l.linkshellid AND ci.location = 0
+                         LEFT JOIN char_inventory AS ci ON CONV(HEX(REVERSE(SUBSTRING(ci.extra, 1, 4))), 16, 10) = l.linkshellid AND ci.location = 0
                          LEFT JOIN char_equip AS ce ON ce.charid = ci.charid AND ce.slotid = ci.slot AND ce.containerid = 0
                          WHERE ce.equipslotid > 0 AND ci.itemid IN (513,514,515) AND ci.charid = ?;`;
             arcanus.db.query(sql, [charid], function (err, rows) {

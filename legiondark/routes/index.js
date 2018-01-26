@@ -79,6 +79,21 @@ module.exports = function (arcanus) {
         res.render('whosonline', res.model);
     });
 
+    /**
+     * Gets the donate page.
+     *
+     * @param {object} req                      The request object.
+     * @param {object} res                      The response object.
+     * @param {function} next                   The callback function to continue the request chain.
+     */
+    router.get('/donate', function (req, res, next) {
+        res.model.site.meta.setTitle('Donations');
+        res.model.site.meta.description = 'Say thanks, with money!';
+
+        // Render the page..
+        res.render('donate', res.model);
+    });
+
     // Return the router..
     return router;
 };

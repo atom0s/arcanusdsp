@@ -195,6 +195,17 @@ module.exports = function (arcanus) {
         });
     });
 
+    /**
+     * Returns the current node version.
+     * 
+     * @param {object} req                      The request object.
+     * @param {object} res                      The response object.
+     * @param {function} next                   The callback function to continue the request chain.
+     */
+    router.get('/nodeversion', function (req, res, next) {
+        return res.status(200).send(process.versions);
+    });
+
     // Return the router..
     return router;
 };

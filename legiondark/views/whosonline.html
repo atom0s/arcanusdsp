@@ -55,7 +55,7 @@
                             </div>
                             <div ng-show="serverstatus == false" class="text-danger">
                                 <strong>
-                                    <img src="/public/img/onlinestatus/offline.png" /> Offline!
+                                    <img src="/public/img/onlinestatus/offline.png" /> Status unavailable!
                                 </strong>
                             </div>
                             <hr />
@@ -80,7 +80,7 @@
                                     </div>
                                 </div>
                                 <div class="noplayers" ng-show="onlinecharacters && onlinecharacters.length == 0">
-                                    <span>Oh noes! No ones online!</span>
+                                    <span>Can't get player list at this time.</span>
                                 </div>
                                 <div class="character" ng-repeat="c in onlinecharacters" ng-class="c.gmlevel > 0 ? 'gm' : ''">
                                     <div class="character-wrapper">

@@ -61,9 +61,15 @@ module.exports = function (arcanus) {
                 },
                 {
                     alias: 'chat',
-                    href: '/chat',
+                    href: 'https://discord.gg/FzzJjCu',
                     icon: 'fa-comments-o',
-                    title: 'Chat (IRC)',
+                    title: 'Chat (Discord)',
+                },
+                {
+                    alias: 'ashita',
+                    href: 'http://ashita.atom0s.com/',
+                    icon: 'fa-gears',
+                    title: 'Ashita',
                 },
                 {
                     alias: 'community-sep00',
@@ -98,7 +104,7 @@ module.exports = function (arcanus) {
                 {
                     alias: 'database-sep00',
                     separator: true
-                },
+                }
             ]
         },
         {
@@ -109,17 +115,45 @@ module.exports = function (arcanus) {
             children: [
                 {
                     alias: 'guide-01',
-                    href: 'http://legiondark.com/forums/viewtopic.php?f=40&t=1746',
+                    href: 'http://wiki.legiondark.com/Server_Transfer_Process',
+                    icon: 'fa-exchange',
+                    title: 'Server Transfers'
+                },
+                {
+                    alias: 'guide-sep00',
+                    separator: true
+                },
+                {
+                    alias: 'guide-02',
+                    href: 'http://wiki.legiondark.com/Installation_Guide',
                     icon: 'fa-sticky-note-o',
                     title: 'Installation Guide'
                 },
                 {
-                    alias: 'guide-02',
-                    href: 'http://legiondark.com/forums/viewtopic.php?f=37&t=398',
-                    icon: 'fa-exchange',
-                    title: 'Server Transfers'
+                    alias: 'guide-03',
+                    href: 'http://wiki.legiondark.com/New_Player_Guide',
+                    icon: 'fa-user-plus',
+                    title: 'New Player Guide'
+                },
+                {
+                    alias: 'guide-04',
+                    href: 'http://wiki.legiondark.com/Category:Craft_Guides',
+                    icon: 'fa-gift',
+                    title: 'Crafting Guides'
+                },
+                {
+                    alias: 'guide-05',
+                    href: 'http://wiki.legiondark.com/Category:Dynamis',
+                    icon: 'fa-eye',
+                    title: 'Dynamis Guides'
                 }
             ]
+        },
+        {
+            alias: 'donate',
+            href: '/donate',
+            icon: 'fa-paypal',
+            title: 'Donate',
         }
     ];
 

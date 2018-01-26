@@ -1,5 +1,30 @@
 @html.extend('layout', function(model) { @html.block('content', function(model) {
 
+<div class="widget widget-red">
+    <div class="widget-heading">
+        <div class="widget-title">
+            <span>Important Warning!</span>
+        </div>
+    </div>
+    <div class="widget-body" style="vertical-align: top;">
+        <table class="table text-center" style="margin-bottom: 0; vertical-align: middle;">
+            <tr>
+                <td style="vertical-align: middle;">
+                    <i class="fa fa-exclamation-triangle fa-5x alert-warning" style="background: transparent; color: #D49B3A"></i>
+                </td>
+                <td>
+        Please note, not all BCNM/KSNMs listed here work. <br />
+        For a list of working battlefields, refer to the wiki here:
+        <br /><br />
+        <a href="http://wiki.legiondark.com/BCNM/KSNM_Status">http://wiki.legiondark.com/BCNM/KSNM_Status</a>
+                </td>
+            </tr>
+
+        </table>
+
+    </div>
+</div>
+
 <div id="bcnms" class="widget widget-blue" ng-controller="bcnmToolController" data-ng-init="getBcnmList()" ng-cloak>
     <div class="widget-heading">
         <div class="widget-title">

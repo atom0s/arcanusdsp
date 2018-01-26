@@ -105,6 +105,9 @@ module.exports = function NewsServiceModule(arcanus) {
         // Build the news post request url..
         var url = arcanus.utils.format('%s/%s?a=news&id=%d&l=%d&p=%s', cfg.path, cfg.script, cfg.forumId, cfg.count, cfg.path);
 
+        arcanus.log.error('NewsService Attempt: ' + url);
+        
+
         // Make the request..
         var request = http.request(url, callback);
         request.on('error', function (err) {
