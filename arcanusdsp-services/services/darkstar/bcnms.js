@@ -160,6 +160,9 @@ module.exports = function (arcanus) {
 
                 bcnm.drops = [];
                 rows.forEach(function (r) {
+                    if (!isAdmin) {
+                        r.rolls = 0;
+                    }
                     if (!bcnm.drops[r.lootgroupid])
                         bcnm.drops[r.lootgroupid] = [];
                     bcnm.drops[r.lootgroupid].push(r);

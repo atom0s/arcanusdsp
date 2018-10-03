@@ -80,13 +80,14 @@ module.exports = function (arcanus) {
                     href: 'https://github.com/KupoServer/Issues',
                     icon: 'fa-github',
                     title: 'Bug Reports (Server)',
-                },
+                }
+                /*,
                 {
                     alias: 'bugreportsweb',
                     href: 'https://github.com/KupoServer/Website',
                     icon: 'fa-github',
                     title: 'Bug Reports (Website)',
-                }
+                }*/
             ]
         },
         {
@@ -97,7 +98,7 @@ module.exports = function (arcanus) {
             children: [
                 {
                     alias: 'whosoinline',
-                    href: 'https://devbeta.kupoffxi.com/whosonline/',
+                    href: 'https://www.kupoffxi.com/whosonline/',
                     icon: 'fa-list',
                     title: 'Whos Online (Mobile)',
                 },
@@ -113,6 +114,40 @@ module.exports = function (arcanus) {
             icon: 'fa-info-circle',
             title: 'Guides',
             children: [
+                {
+                    alias: 'guide-01',
+                    href: 'http://www.mediafire.com/file/nj0vl4dsl9dp0ga/Kupo64.zip',
+                    icon: 'fa-cubes',
+                    title: 'Kupo Install Package (64bit)(Updated)'
+                },
+                {
+                    alias: 'guide-sep00',
+                    separator: true
+                },
+                {
+                    alias: 'guide-02',
+                    href: 'https://www.kupoffxi.com/forums/viewtopic.php?f=23&t=2202',
+                    icon: 'fa-shield',
+                    title: 'Server Rules'
+                },
+                {
+                    alias: 'guide-03',
+                    href: 'https://www.kupoffxi.com/forums/viewtopic.php?f=23&t=2258',
+                    icon: 'fa-list-ul',
+                    title: 'Player Commands'
+                },
+                {
+                    alias: 'guide-04',
+                    href: 'http://kupoffxi.wikia.com/wiki/FFXI_Beginners%27_Guide',
+                    icon: 'fa-user-plus',
+                    title: 'New Player Guide'
+                },
+                {
+                    alias: 'guide-05',
+                    href: 'http://kupoffxi.wikia.com/wiki/Kupo_Experience_Camps',
+                    icon: 'fa-plus',
+                    title: 'Experience Camps'
+                }
             ]
         },
         {

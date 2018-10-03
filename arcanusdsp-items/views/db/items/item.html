@@ -333,7 +333,8 @@
                                         <td><a ng-href="/db/monsters/{{d.mobid}}/{{d.polutils_name}}">{{d.polutils_name
                                             | cleanName}}</a></td>
                                         <td>{{d.zonename | cleanNameTitleCase}}</td>
-                                        <td>(Hidden)</td>
+                                        <td ng-show="d.rate > 0">{{d.rate * 0.1 | number:2}}%</td>
+                                        <td ng-show="d.rate == 0">(Hidden)</td>
                                         <td>
                                             <strong>X:</strong> {{d.pos_x}},
                                             <strong>Y:</strong> {{d.pos_y}},

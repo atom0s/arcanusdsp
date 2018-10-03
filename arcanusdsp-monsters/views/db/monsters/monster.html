@@ -121,7 +121,8 @@
                                     {{d.itemname | cleanNameTitleCase}}
                                 </a>
                             </td>
-                            <td class="rate">(Hidden)</td>
+                            <td class="rate" ng-show="d.rate > 0">{{d.rate * 0.1 | number:2}}%</td>
+                            <td class="rate" ng-show="d.rate == 0">(Hidden)</td>
                         </tr>
                     </tbody>
                 </table>

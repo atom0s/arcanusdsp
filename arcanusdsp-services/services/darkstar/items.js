@@ -365,7 +365,7 @@ module.exports = function (arcanus) {
 
         // Query for the monsters that drop this item..
         tasks.push(function (callback) {
-            const sql = `SELECT sp.mobid, dl.itemrate, g.zoneid, sp.mobname, sp.polutils_name, sp.pos_x, sp.pos_y, sp.pos_z, z.name AS zonename FROM mob_droplist as dl
+            const sql = `SELECT sp.mobid, dl.rate, g.zoneid, sp.mobname, sp.polutils_name, sp.pos_x, sp.pos_y, sp.pos_z, z.name AS zonename FROM mob_droplist as dl
                          LEFT JOIN mob_groups AS g ON dl.dropid = g.dropid
                          LEFT JOIN mob_spawn_points AS sp ON g.groupid = sp.groupid
                          LEFT JOIN zone_settings AS z ON g.zoneid = z.zoneid
@@ -378,6 +378,9 @@ module.exports = function (arcanus) {
                     return callback();
 
                 rows.forEach(function (r) {
+                    if (!isAdmin) {
+                        r.rate = 0;
+                    }
                     item.drops.push(r);
                 });
 
@@ -387,7 +390,7 @@ module.exports = function (arcanus) {
 
         // Query for the monsters that drop this item (scripted)..
         tasks.push(function (callback) {
-            const sql = `SELECT sp.mobid, dl.itemrate, g.zoneid, sp.mobname, sp.polutils_name, sp.pos_x, sp.pos_y, sp.pos_z, z.name AS zonename FROM mob_droplist_scripted as dl
+            const sql = `SELECT sp.mobid, dl.rate, g.zoneid, sp.mobname, sp.polutils_name, sp.pos_x, sp.pos_y, sp.pos_z, z.name AS zonename FROM mob_droplist_scripted as dl
                          LEFT JOIN mob_groups AS g ON dl.dropid = g.dropid
                          LEFT JOIN mob_spawn_points AS sp ON g.groupid = sp.groupid
                          LEFT JOIN zone_settings AS z ON g.zoneid = z.zoneid
@@ -398,6 +401,9 @@ module.exports = function (arcanus) {
                     return callback();
 
                 rows.forEach(function (r) {
+                    if (!isAdmin) {
+                        r.rate = 0;
+                    }
                     item.drops.push(r);
                 });
 

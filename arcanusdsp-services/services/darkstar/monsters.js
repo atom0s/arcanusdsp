@@ -194,7 +194,7 @@ module.exports = function (arcanus) {
 
         // Query for the monsters drops.
         tasks.push(function (callback) {
-            const sql = `SELECT dl.itemid, dl.itemrate, COALESCE(ita.name, itb.name, itf.name, itp.name, itw.name) AS itemname FROM mob_droplist AS dl
+            const sql = `SELECT dl.itemid, dl.rate, COALESCE(ita.name, itb.name, itf.name, itp.name, itw.name) AS itemname FROM mob_droplist AS dl
                          LEFT JOIN item_armor AS ita ON dl.itemid = ita.itemid
                          LEFT JOIN item_basic AS itb ON dl.itemid = itb.itemid
                          LEFT JOIN item_furnishing AS itf ON dl.itemid = itf.itemid
@@ -210,6 +210,9 @@ module.exports = function (arcanus) {
                 // Build the drop list..
                 monster.drops = [];
                 rows.forEach(function (drop) {
+                    if (!isAdmin) {
+                        drop.rate = 0;
+                    }
                     monster.drops.push(drop);
                 });
 
@@ -217,9 +220,10 @@ module.exports = function (arcanus) {
             });
         });
 
+        /*
         // Query for the monsters drops (scripted).
         tasks.push(function (callback) {
-            const sql = `SELECT dl.itemid, dl.itemrate, COALESCE(ita.name, itb.name, itf.name, itp.name, itw.name) AS itemname FROM mob_droplist_scripted AS dl
+            const sql = `SELECT dl.itemid, dl.rate, COALESCE(ita.name, itb.name, itf.name, itp.name, itw.name) AS itemname FROM mob_droplist_scripted AS dl
                          LEFT JOIN item_armor AS ita ON dl.itemid = ita.itemid
                          LEFT JOIN item_basic AS itb ON dl.itemid = itb.itemid
                          LEFT JOIN item_furnishing AS itf ON dl.itemid = itf.itemid
@@ -234,12 +238,16 @@ module.exports = function (arcanus) {
 
                 // Build the drop list..
                 rows.forEach(function (drop) {
+                    if (!isAdmin) {
+                        drop.rate = 0;
+                    }
                     monster.drops.push(drop);
                 });
 
                 return callback();
             });
         });
+        */
 
         // Calculate the monsters true health value.
         tasks.push(function (callback) {

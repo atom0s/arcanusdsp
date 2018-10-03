@@ -20,14 +20,16 @@
     @html.block('header-scripts')
 </head>
 <body class="ng-cloak" ng-app="arcanusdsp" ng-controller="arcanusdspController" ng-cloak>
-    <!-- Include the header. -->
-    @html.include('header')
+    <div class="container-fluid banner-container">
+        <!-- Include the header. -->
+        @html.include('header')
+
+        <!-- Include the navigation. -->
+        @html.include('navigation')
+    </div>
 
     <!-- Main content wrapper. -->
     <div class="container-fluid wrapper">
-        <!-- Include the navigation. -->
-        @html.include('navigation')
-
         <div class="container-fluid content">
             <div class="row row-slim-padding">
                 <div class="col-md-12">

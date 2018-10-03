@@ -470,6 +470,19 @@ module.exports = function (arcanus) {
             });
         });
 
+        // 5.a Query for the characters total AH entries that are active..
+        tasks.push(function (callback) {
+            const sql = `SELECT COUNT(*) AS count FROM auction_house WHERE sale <= 0 AND seller_name = ?;`;
+
+            arcanus.db.query(sql, [character.charname], function (err, rows) {
+                if (err)
+                    return callback(err);
+
+                character.totalahentries = rows[0].count;
+                return callback();
+            });
+        });
+
         // 6. Query for the characters bazaar information..
         tasks.push(function (callback) {
             const sql = `SELECT ci.itemid, ci.quantity, ci.bazaar, COALESCE(ita.name,itb.name,itf.name,itp.name,itw.name) AS itemname FROM char_inventory AS ci
