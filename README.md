@@ -12,7 +12,13 @@ Donations
 
 Donations can be made through Paypal:
 
-[Donate via Paypal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=C4KSPG6FJYH98)
+[Donate via Paypal](https://paypal.me/atom0s)
+
+
+2020 Reimport
+=======
+
+This is a reimport of this project to GitHub, from GitLab. This now includes all past commit history, and all recent changes when this framework was still last used for usage with the original Kupo private server. 
 
 Thanks To
 =======
